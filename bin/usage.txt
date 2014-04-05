@@ -1,0 +1,23 @@
+
+Usage:
+  renders {options} <fragment shader>
+
+  View and edit GLSL fragment shaders in your browser, with speedy
+  real time updates on save.
+
+  Shaders are compiled with glslify, which lets you use modules
+  from npm as reusable bits of shader code. See:
+  http://github.com/chrisdickinson/glslify
+
+Options:
+  -o, --open  Automatically opens the shader viewer in your browser.
+  -p, --port  Specifies the port to listen to.
+
+Uniform Variables:
+  <float> time        The current unix time stamp, in seconds.
+  <vec2>  mouse       The coordinates of the mouse on the screen, from 0 to 1.
+  <vec2>  resolution  The width and height of the shader in pixels.
+
+Varying Variables:
+  <vec2>  surfacePosition  The position of the pixel on the screen,
+                           from -1 to 1.

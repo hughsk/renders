@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+
+var minimist = require('minimist')
+var renders = require('../server')
+var opener = require('opener')
+var http = require('http')
+var path = require('path')
+var fs = require('fs')
+
+var argv = minimist(process.argv.slice(2))
+var port = argv.port || process.env.PORT || 31415
+var file = argv._[0]
+
+if (!file) return help('Please specify a shader file to watch')
+
+file = path.resolve(process.cwd(), file)
+
+var handle = renders(file, {
+  scale: 2
+})
+
+var server = http.createServer(function(req, res) {
+  handle(req, res, function(err) {
+    if (err) return res.end([err.message, err.stack].join('\n'))
+
+    res.statusCode = 404
+    res.end('404')
+  })
+})
+
+server.listen(port, function(err) {
+  if (err) throw err
+  var site = 'http://localhost:' + port
+  console.log(site)
+  if (argv.open) opener(site)
+})
+
+function fail(message) {
+  console.log(message)
+}
+
+function help(message) {
+  if (message) console.log(message)
+  process.stdout.write(fs.readFileSync(__dirname + '/usage.txt'))
+  process.exit(1)
+}
